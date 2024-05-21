@@ -77,7 +77,14 @@ void AInteractiveArchController::OnLeftClick()
 		SpawnedMeshActor = Cast<AMeshActor>(HitonClick.GetActor());
 		if (SpawnedMeshActor) {
 			LastHitLocation = HitonClick.GetActor()->GetActorLocation();
-			GetPawn()->SetActorLocation(LastHitLocation);
+			if (GetPawn()->GetClass() == IsometricPawn->GetClass())
+			{
+				GetPawn()->SetActorLocation(LastHitLocation + FVector(0,0,200));
+			}
+			else {
+				GetPawn()->SetActorLocation(LastHitLocation);
+			}
+			
 			if (SelectionWidget) {
 				SelectionWidget->ScrollBox_1->SetVisibility(ESlateVisibility::Visible);
 				SelectionWidget->ScrollBox_2->SetVisibility(ESlateVisibility::Visible);
@@ -85,7 +92,13 @@ void AInteractiveArchController::OnLeftClick()
 			}
 		}
 		else {
-			GetPawn()->SetActorLocation(LastHitLocation);
+			if (GetPawn()->GetClass() == IsometricPawn->GetClass())
+			{
+				GetPawn()->SetActorLocation(LastHitLocation + FVector(0, 0, 200));
+			}
+			else {
+				GetPawn()->SetActorLocation(LastHitLocation);
+			}
 			IsDestroyed = true;
 			if(SelectionWidget){
 				if(SelectionWidget->ScrollBox_1->ScrollBoxType == EScrollBoxType::MeshData){
