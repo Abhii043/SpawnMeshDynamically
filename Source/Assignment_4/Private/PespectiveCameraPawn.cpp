@@ -108,7 +108,19 @@ void APespectiveCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void APespectiveCameraPawn::Move(const FInputActionValue& ActionValue)
 {
 	FVector Value = ActionValue.Get<FInputActionValue::Axis3D>();
-	AddMovementInput(GetControlRotation().RotateVector(Value), MoveScale);
+	/*AddMovementInput(GetControlRotation().RotateVector(Value), MoveScale);*/
+
+	FVector MovementInput = ActionValue.Get<FVector>();
+	FRotator Rotation = Controller->GetControlRotation();
+	FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	FVector UpDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
+
+	AddMovementInput(ForwardDirection, MovementInput.X);
+	AddMovementInput(RightDirection, MovementInput.Y);
+	AddMovementInput(UpDirection, MovementInput.Z);
 }
 
 void APespectiveCameraPawn::Look(const FInputActionValue& ActionValue)
